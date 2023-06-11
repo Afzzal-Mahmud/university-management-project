@@ -56,6 +56,29 @@ const successLogger = createLogger({
   ],
 })
 
+const gracefullyShutdown = createLogger({
+  level: 'info',
+  format: combine(
+    label({ label: 'PHU GRACEFULL LOG' }),
+    customTimestamp,
+    myFormat,
+    prettyPrint()
+  ),
+  defaultMeta: { service: 'gracefull-shutdown-server-info' },
+  transports: [
+    new transports.Console(),
+    createFileTransport(
+      path.join(
+        process.cwd(),
+        'logs',
+        'winston',
+        'gracefully-shutdown-info',
+        'shutdown-%DATE%.log'
+      )
+    ),
+  ],
+})
+
 const errorLogger = createLogger({
   level: 'error',
   format: combine(
@@ -73,4 +96,4 @@ const errorLogger = createLogger({
   ],
 })
 
-export { successLogger, errorLogger }
+export { successLogger, gracefullyShutdown, errorLogger }
