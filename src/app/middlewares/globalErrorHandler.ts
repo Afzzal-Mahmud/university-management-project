@@ -3,6 +3,7 @@ import { Error as MongooseError } from 'mongoose'
 import ApiErrors from '../../errors/ApiErrors'
 import config from '../../config'
 import { IGenericErrorMessages } from '../../interfaces/IGenericErrorMessages'
+import { ZodError } from 'zod'
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   let statusCode = 500
@@ -17,6 +18,25 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
       message: error.message,
       stack: error?.stack,
     }))
+  } else if (err instanceof ZodError) {
+    statusCode = 400
+    message = 'Zod Error'
+    /*valuesFromZodErr returns array of object so, 
+            I thought distructuring[] would be good*/
+    const [valuesFromZodErr] = err.issues.map(issue => ({
+      /* path returns array of array where we 
+      are only taking the last property*/
+      path: issue.path[issue.path.length - 1],
+      message: issue.message,
+    }))
+
+    const zodPath = valuesFromZodErr.path
+    const zodMessage = valuesFromZodErr.message
+
+    errorMessages.push({
+      path: zodPath,
+      message: zodMessage,
+    })
   } else if (err instanceof MongooseError.CastError) {
     statusCode = 400
     message = 'Cast Error'
