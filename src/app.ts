@@ -3,6 +3,7 @@ import cors from 'cors'
 
 import globalErrorHandler from './app/middlewares/globalErrorHandler'
 import { userRoutes } from './app/modules/users/users.route'
+import { academicSemesterRoute } from './app/modules/academicSemester/academicSemester.route'
 
 const app: Application = express()
 
@@ -18,6 +19,8 @@ app.get('/', (req: Request, res: Response) => {
 
 // User routes
 app.use('/api/v1/users/', userRoutes.router)
+// Semester routes
+app.use('/api/v1/create-semesters/', academicSemesterRoute.router)
 
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
