@@ -4,6 +4,7 @@ import {
   AcademicSemesterModel,
   IAcademicSemester,
 } from './academicSemester.interface'
+import ApiErrors from '../../../errors/ApiErrors'
 
 const AcademicSemesterSchema = new Schema<IAcademicSemester>(
   {
@@ -36,6 +37,17 @@ const AcademicSemesterSchema = new Schema<IAcademicSemester>(
     timestamps: true,
   }
 )
+
+AcademicSemesterSchema.pre('save', async function (next) {
+  const isSemesterExist = await AcademicSemester.findOne({
+    title: this.title,
+    year: this.year,
+  })
+  if (isSemesterExist) {
+    throw new ApiErrors(409, `${this.title} semester exist in ${this.year}`)
+  }
+  next()
+})
 
 export const AcademicSemester = model<IAcademicSemester, AcademicSemesterModel>(
   'AcademicSemester',
