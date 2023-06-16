@@ -5,6 +5,7 @@ import globalErrorHandler from './app/middlewares/globalErrorHandler'
 // import { userRoutes } from './app/modules/users/users.route'
 // import { academicSemesterRoute } from './app/modules/academicSemester/academicSemester.route'
 import { mainRoutes } from './app/routes'
+import { handleNotFoundRoute } from './errors/handleNotFoundRoute'
 
 const app: Application = express()
 
@@ -25,5 +26,8 @@ app.use('/api/v1', mainRoutes.routers)
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   globalErrorHandler(err, req, res, next)
 })
+
+// handle page not found
+app.use(handleNotFoundRoute)
 
 export default app
