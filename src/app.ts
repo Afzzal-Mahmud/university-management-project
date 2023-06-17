@@ -2,8 +2,10 @@ import express, { Application, Request, Response, NextFunction } from 'express'
 import cors from 'cors'
 
 import globalErrorHandler from './app/middlewares/globalErrorHandler'
-import { userRoutes } from './app/modules/users/users.route'
-import { academicSemesterRoute } from './app/modules/academicSemester/academicSemester.route'
+// import { userRoutes } from './app/modules/users/users.route'
+// import { academicSemesterRoute } from './app/modules/academicSemester/academicSemester.route'
+import { mainRoutes } from './app/routes'
+import { handleNotFoundRoute } from './errors/handleNotFoundRoute'
 
 const app: Application = express()
 
@@ -17,14 +19,15 @@ app.get('/', (req: Request, res: Response) => {
   res.send('initial setup completed')
 })
 
-// User routes
-app.use('/api/v1/users/', userRoutes.router)
-// Semester routes
-app.use('/api/v1/create-semesters/', academicSemesterRoute.router)
+// handling all main routes in separate folder to not to polute app.ts
+app.use('/api/v1', mainRoutes.routers)
 
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   globalErrorHandler(err, req, res, next)
 })
+
+// handle page not found
+app.use(handleNotFoundRoute)
 
 export default app
