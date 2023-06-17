@@ -9,7 +9,8 @@ export const sendResponse = <T>(
     statusCode: data.statusCode,
     success: data.success,
     message: data.message,
-    data: data.data || null,
+    meta: data.meta,
+    data: data.data,
   }
   res.status(200).json(responseData)
 }
