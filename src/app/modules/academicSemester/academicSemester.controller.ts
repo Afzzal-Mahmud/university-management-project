@@ -3,6 +3,7 @@ import { AcademicSemesterService } from './academicSemester.service.query'
 import { catchAsync } from '../../../shared/catchAsync'
 import { sendResponse } from '../../../shared/sendResponse'
 import { IAcademicSemester } from './academicSemester.interface'
+import { pickRequest } from '../../../shared/pickRequest'
 
 const createSemester = catchAsync(async (req: Request, res: Response) => {
   const { ...academicSemesterData } = req.body
@@ -18,6 +19,24 @@ const createSemester = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const getSemesters = catchAsync(async (req: Request, res: Response) => {
+  const paginationKeyArray: string[] = ['page', 'limit', 'sortBy', 'sortOrder']
+
+  const paginationOptions = pickRequest(req.query, paginationKeyArray)
+  const result = await AcademicSemesterService.getAllSemesters(
+    paginationOptions
+  )
+
+  sendResponse<IAcademicSemester[]>(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Semester retrive successfully',
+    meta: result.meta,
+    data: result.data,
+  })
+})
+
 export const academicSemesterControllers = {
   createSemester,
+  getSemesters,
 }
