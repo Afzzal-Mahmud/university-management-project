@@ -4,7 +4,10 @@ import { IGenericResponseOnGet } from '../../../interfaces/IGenericResponseOnGet
 import { IPaginationOptions } from '../../../interfaces/IPaginationOptions'
 import { calculatePagination } from '../../../shared/helpers/paginationHelpers'
 import { academicSemesterCodeMapper } from './academicSemester.constant'
-import { IAcademicSemester } from './academicSemester.interface'
+import {
+  IAcademicSemester,
+  IAcademicSemesterFilters,
+} from './academicSemester.interface'
 import { AcademicSemester } from './academicSemester.model'
 
 const createAcademicSemester = async (
@@ -21,16 +24,44 @@ const createAcademicSemester = async (
 }
 
 const getAllSemesters = async (
+  filters: IAcademicSemesterFilters,
   paginationOptions: IPaginationOptions
 ): Promise<IGenericResponseOnGet<IAcademicSemester[]>> => {
   const { page, limit, skipDoc, sortBy, sortOrder } =
     calculatePagination(paginationOptions)
 
+  const { searchTerm, ...filtersData } = filters
+  const semesterSearchTermsArray = ['title', 'code', 'year']
+  const andCondition = []
+  if (searchTerm) {
+    andCondition.push({
+      $or: semesterSearchTermsArray.map(searchField => ({
+        [searchField]: {
+          $regex: searchTerm,
+          $options: 'i',
+        },
+      })),
+    })
+  }
+
+  if (Object.keys(filtersData).length) {
+    andCondition.push({
+      $and: Object.entries(filtersData).map(([field, value]) => ({
+        [field]: value,
+      })),
+    })
+  }
+
+  // whenDataAvailable actually check if user gives us empty search field it resolve it .
+
+  const whenDataAvailable =
+    andCondition.length > 0 ? { $and: andCondition } : {}
+
   const sortCondition: { [key: string]: SortOrder } = {}
   if (sortBy && sortOrder) {
     sortCondition[sortBy] = sortOrder
   }
-  const result = await AcademicSemester.find()
+  const result = await AcademicSemester.find(whenDataAvailable)
     .sort(sortCondition)
     .skip(skipDoc)
     .limit(limit)

@@ -2,7 +2,10 @@ import { Request, Response } from 'express'
 import { AcademicSemesterService } from './academicSemester.service.query'
 import { catchAsync } from '../../../shared/catchAsync'
 import { sendResponse } from '../../../shared/sendResponse'
-import { IAcademicSemester } from './academicSemester.interface'
+import {
+  IAcademicSemester,
+  IAcademicSemesterFilters,
+} from './academicSemester.interface'
 import { pickRequest } from '../../../shared/pickRequest'
 
 const createSemester = catchAsync(async (req: Request, res: Response) => {
@@ -20,10 +23,18 @@ const createSemester = catchAsync(async (req: Request, res: Response) => {
 })
 
 const getSemesters = catchAsync(async (req: Request, res: Response) => {
-  const paginationKeyArray: string[] = ['page', 'limit', 'sortBy', 'sortOrder']
+  const filters = await pickRequest(req.query, [
+    'searchTerm',
+    'title',
+    'code',
+    'year',
+  ])
 
+  const paginationKeyArray: string[] = ['page', 'limit', 'sortBy', 'sortOrder']
   const paginationOptions = pickRequest(req.query, paginationKeyArray)
+
   const result = await AcademicSemesterService.getAllSemesters(
+    filters as IAcademicSemesterFilters,
     paginationOptions
   )
 
