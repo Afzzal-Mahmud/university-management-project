@@ -5,7 +5,7 @@ import config from '../../config'
 import { IGenericErrorMessages } from '../../interfaces/IGenericErrorMessages'
 import { ZodError } from 'zod'
 
-const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
+const globalErrorHandler: ErrorRequestHandler = (err, req, res) => {
   let statusCode = 500
   let message = 'Something went wrong'
   let errorMessages: IGenericErrorMessages[] = []
@@ -68,7 +68,5 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     errorMessages,
     stack: config.env !== 'production' ? err?.stack : message,
   })
-
-  next()
 }
 export default globalErrorHandler
