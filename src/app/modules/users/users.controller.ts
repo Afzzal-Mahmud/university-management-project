@@ -5,7 +5,7 @@ import { sendResponse } from '../../../shared/sendResponse'
 import { IUser } from './users.interface'
 
 const createNewUser = catchAsync(async (req: Request, res: Response) => {
-  const { user } = req.body
+  const { ...user } = req.body
   const result = await userServices.createUser(user)
 
   sendResponse<IUser>(res, {
