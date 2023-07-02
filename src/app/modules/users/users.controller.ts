@@ -4,9 +4,10 @@ import { catchAsync } from '../../../shared/catchAsync'
 import { sendResponse } from '../../../shared/sendResponse'
 import { IUser } from './users.interface'
 
-const createNewUser = catchAsync(async (req: Request, res: Response) => {
-  const { ...user } = req.body
-  const result = await userServices.createUser(user)
+const createNewStudent = catchAsync(async (req: Request, res: Response) => {
+  // userData represents password field and student represents a student's personal info such as name,address,and so on
+  const { student, ...userData } = req.body
+  const result = await userServices.createStudent(student, userData)
 
   sendResponse<IUser>(res, {
     statusCode: 200,
@@ -17,5 +18,5 @@ const createNewUser = catchAsync(async (req: Request, res: Response) => {
 })
 
 export const userControllers = {
-  createNewUser,
+  createNewStudent,
 }
