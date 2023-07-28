@@ -8,7 +8,6 @@ import {
   Guardian,
   IStudent,
   IStudentFilters,
-  // IStudentPartialData,
   LocalGuardian,
   UserName,
 } from './student.interface'
@@ -101,8 +100,6 @@ const updateStudentInfo = async (
     ...studentData
   } = payload
 
-  // const otherStudentData: Partial<IStudent> = { ...studentData }
-
   if (payload.name) {
     for (const key in name) {
       if (Object.prototype.hasOwnProperty.call(name, key)) {
@@ -141,9 +138,6 @@ const updateStudentInfo = async (
 
   Object.assign(isStudentExist, studentData)
 
-  // const result = await isStudentExist.save()
-  // return result
-
   const result = await Student.findOneAndUpdate({ id }, payload, {
     new: true,
   })
@@ -163,61 +157,3 @@ export const studentServices = {
   updateStudentInfo,
   deleteStudent,
 }
-
-// id,
-// gender,
-// dateOfBirth,
-// email,
-// contactNo,
-// emergencyContactNo,
-// bloodGroup,
-// presentAddress,
-// permanentAddress,
-// profileImage
-
-// const updateStudentInfo = async (
-//   id: string,
-//   payload: Partial<IStudent>
-// ): Promise<IStudent | null> => {
-//   const isStudentExist = await Student.findOne({ id })
-//   if (!isStudentExist) {
-//     throw new ApiErrors(404, 'Student not found')
-//   }
-
-//   const {
-//     name,
-//     guardian,
-//     localGuardian,
-//     academicFaculty,
-//     academicDepartment,
-//     academicSemester,
-//     ...studentData
-//   } = payload
-
-//   if (name) {
-//     Object.assign(isStudentExist.name, name)
-//   }
-
-//   if (guardian) {
-//     Object.assign(isStudentExist.guardian, guardian)
-//   }
-
-//   if (localGuardian) {
-//     Object.assign(isStudentExist.localGuardian, localGuardian)
-//   }
-
-//   if (academicFaculty !== undefined) {
-//     isStudentExist.academicFaculty = academicFaculty
-//   }
-//   if (academicDepartment !== undefined) {
-//     isStudentExist.academicDepartment = academicDepartment
-//   }
-//   if (academicSemester !== undefined) {
-//     isStudentExist.academicSemester = academicSemester
-//   }
-
-//   Object.assign(isStudentExist, studentData)
-
-//   const result = await isStudentExist.save()
-//   return result
-// }
