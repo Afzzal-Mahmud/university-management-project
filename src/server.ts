@@ -2,7 +2,7 @@ import { Server } from 'http'
 import mongoose from 'mongoose'
 import app from './app'
 import config from './config/index'
-import { errorLogger, gracefullyShutdown, successLogger } from './shared/logger'
+// import { errorLogger, gracefullyShutdown, successLogger } from './shared/logger'
 
 let server: Server
 
