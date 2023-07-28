@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const app_1 = __importDefault(require("./app"));
 const index_1 = __importDefault(require("./config/index"));
+// import { errorLogger, gracefullyShutdown, successLogger } from './shared/logger'
 let server;
 function shutdown() {
     return __awaiter(this, void 0, void 0, function* () {
