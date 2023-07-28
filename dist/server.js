@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const app_1 = __importDefault(require("./app"));
 const index_1 = __importDefault(require("./config/index"));
-const logger_1 = require("./shared/logger");
 let server;
 function shutdown() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -24,7 +23,7 @@ function shutdown() {
                 yield new Promise((resolve, reject) => {
                     server.close(err => {
                         if (err) {
-                            logger_1.errorLogger.error(`Error while closing server: ${err}`);
+                            console.log(`Error while closing server: ${err}`);
                             reject(err);
                         }
                         else {
@@ -34,46 +33,46 @@ function shutdown() {
                 });
             }
             yield mongoose_1.default.disconnect();
-            logger_1.successLogger.info('Server gracefully shut down.');
+            console.log('Server gracefully shut down.');
             process.exit(0);
         }
         catch (error) {
-            logger_1.errorLogger.error(`Error during server shutdown: ${error}`);
+            console.log(`Error during server shutdown: ${error}`);
             process.exit(1);
         }
     });
 }
 process.on('SIGINT', () => {
-    logger_1.successLogger.info('SIGINT is received');
-    logger_1.gracefullyShutdown.info('SIGINT is received');
+    console.log('SIGINT is received');
+    console.log('SIGINT is received');
     shutdown();
 });
 process.on('SIGTERM', () => {
-    logger_1.successLogger.info('SIGTERM is received');
-    logger_1.gracefullyShutdown.info('SIGTERM is received');
+    console.log('SIGTERM is received');
+    console.log('SIGTERM is received');
     shutdown();
 });
 process.on('uncaughtException', error => {
-    logger_1.errorLogger.error(error);
-    logger_1.gracefullyShutdown.info('uncaughtException is received');
+    console.log(error);
+    console.log('uncaughtException is received');
     shutdown();
 });
 process.on('unhandledRejection', error => {
-    logger_1.errorLogger.error(error);
-    logger_1.gracefullyShutdown.info('unhandledRejection is received');
+    console.log(error);
+    console.log('unhandledRejection is received');
     shutdown();
 });
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield mongoose_1.default.connect(index_1.default.database_url);
-            logger_1.successLogger.info('Database is connected successfully');
+            console.log('Database is connected successfully');
             server = app_1.default.listen(index_1.default.port, () => {
-                logger_1.successLogger.info(`University Application listening on port ${index_1.default.port}`);
+                console.log(`University Application listening on port ${index_1.default.port}`);
             });
         }
         catch (error) {
-            logger_1.errorLogger.error('Failed to connect to the database', error);
+            console.log('Failed to connect to the database', error);
         }
     });
 }
