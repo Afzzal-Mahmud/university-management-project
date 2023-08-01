@@ -4,10 +4,12 @@ import config from '../../../config/index'
 import ApiErrors from '../../../errors/ApiErrors'
 import { IStudent } from '../student/student.interface'
 import { AcademicSemester } from '../academicSemester/academicSemester.model'
-import { generateStudentId } from './users.utils'
+import { generateFacultyId, generateStudentId } from './users.utils'
 import mongoose from 'mongoose'
 import { Student } from '../student/student.model'
 import { IAcademicSemester } from '../academicSemester/academicSemester.interface'
+import { IFaculty } from '../facultyAsTeachers/faculty.interface'
+import { Faculty } from '../facultyAsTeachers/faculty.model'
 
 const createStudent = async (
   student: IStudent,
@@ -51,7 +53,7 @@ const createStudent = async (
     await session.endSession()
   } catch (error) {
     await session.abortTransaction()
-    await session.endSession
+    await session.endSession()
     throw new ApiErrors(400, 'roleback while create user and student')
   }
 
@@ -68,6 +70,61 @@ const createStudent = async (
   return newUserAllData
 }
 
+const createFaculty = async (
+  faculty: IFaculty,
+  user: IUser
+): Promise<IUser | null> => {
+  user.role = 'faculty'
+  /* the default password for user */
+  if (!user.password) {
+    user.password = config.default_user_pass as string
+  }
+
+  let newUserAllData = null
+  const session = await mongoose.startSession()
+
+  try {
+    session.startTransaction()
+    /* 1) auto genarated incrimental faculty id */
+    const id = await generateFacultyId()
+    user.id = id
+    faculty.id = id
+
+    const newfaculty = await Faculty.create([faculty], { session })
+    if (!newfaculty.length) {
+      throw new ApiErrors(400, 'Failed to create faculty')
+    }
+    // set faculty --> _id into user.faculty
+    user.faculty = newfaculty[0]._id
+    // console.log(user)
+    const newUser = await User.create([user], { session })
+
+    if (!newUser.length) {
+      throw new ApiErrors(400, 'Failed to create user')
+    }
+    newUserAllData = newUser[0]
+    await session.commitTransaction()
+    await session.endSession()
+  } catch (error) {
+    await session.abortTransaction()
+    await session.endSession()
+    throw new ApiErrors(400, 'Roleback while create user and faculty')
+  }
+
+  if (newUserAllData) {
+    newUserAllData = await User.findOne({ id: newUserAllData.id }).populate({
+      path: 'faculty',
+      populate: [
+        { path: 'academicSemester' },
+        { path: 'academicDepartment' },
+        { path: 'academicFaculty' },
+      ],
+    })
+  }
+  return newUserAllData
+}
+
 export const userServices = {
   createStudent,
+  createFaculty,
 }

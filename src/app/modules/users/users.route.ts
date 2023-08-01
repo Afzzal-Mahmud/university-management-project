@@ -10,4 +10,6 @@ router.post(
   userControllers.createNewStudent
 )
 
+router.post('/create-faculty', userControllers.createFaculty)
+
 export const userRoutes = { router }
