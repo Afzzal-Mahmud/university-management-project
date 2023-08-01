@@ -21,11 +21,12 @@ const retriveAllStudents = async (
     calculatePagination(paginationOptions)
 
   const { searchTerm, ...filtersData } = filters
+  console.log(searchTerm)
   const studentSearchTermsArray = [
     'id',
-    'firstName',
-    'middleName',
-    'lastName',
+    'name.firstName',
+    'name.middleName',
+    'name.lastName',
     'email',
     'contactNo',
   ]

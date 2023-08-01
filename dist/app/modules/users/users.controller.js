@@ -35,6 +35,17 @@ const createNewStudent = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(vo
         data: result,
     });
 }));
+const createFaculty = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const _b = req.body, { faculty } = _b, userData = __rest(_b, ["faculty"]);
+    const result = yield users_services_1.userServices.createFaculty(faculty, userData);
+    (0, sendResponse_1.sendResponse)(res, {
+        statusCode: 200,
+        success: true,
+        message: 'Faculty created successfully!',
+        data: result,
+    });
+}));
 exports.userControllers = {
     createNewStudent,
+    createFaculty,
 };

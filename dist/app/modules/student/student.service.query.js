@@ -30,11 +30,12 @@ const ApiErrors_1 = __importDefault(require("../../../errors/ApiErrors"));
 const retriveAllStudents = (filters, paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {
     const { page, limit, skipDoc, sortBy, sortOrder } = (0, paginationHelpers_1.calculatePagination)(paginationOptions);
     const { searchTerm } = filters, filtersData = __rest(filters, ["searchTerm"]);
+    console.log(searchTerm);
     const studentSearchTermsArray = [
         'id',
-        'firstName',
-        'middleName',
-        'lastName',
+        'name.firstName',
+        'name.middleName',
+        'name.lastName',
         'email',
         'contactNo',
     ];

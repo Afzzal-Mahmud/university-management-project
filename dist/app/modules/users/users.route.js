@@ -10,4 +10,5 @@ const validateZodRequest_1 = __importDefault(require("../../middlewares/validate
 const users_zod_validation_schema_1 = require("./users.zod.validation.schema");
 const router = express_1.default.Router();
 router.post('/create-student', (0, validateZodRequest_1.default)(users_zod_validation_schema_1.userValidation.userZodSchema), users_controller_1.userControllers.createNewStudent);
+router.post('/create-faculty', users_controller_1.userControllers.createFaculty);
 exports.userRoutes = { router };
