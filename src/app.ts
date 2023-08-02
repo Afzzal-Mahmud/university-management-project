@@ -14,7 +14,9 @@ app.use(express.urlencoded({ extended: true }))
 
 // Routes
 app.get('/', (req: Request, res: Response) => {
-  res.send('initial setup completed')
+  res.send(`University Auth Server On Live 
+  <a href="https://universitybackendauth.vercel.app/api/v1/student">Test Api : Get All Student</a>
+  `)
 })
 
 // handling all main routes in separate folder to not to polute app.ts
