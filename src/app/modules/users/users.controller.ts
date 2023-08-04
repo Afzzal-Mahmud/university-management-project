@@ -29,7 +29,20 @@ const createFaculty = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const createAdmin = catchAsync(async (req: Request, res: Response) => {
+  const { admin, ...userData } = req.body
+  const result = await userServices.createAdmin(admin, userData)
+
+  sendResponse<IUser>(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Admin created successfully!',
+    data: result,
+  })
+})
+
 export const userControllers = {
   createNewStudent,
   createFaculty,
+  createAdmin,
 }

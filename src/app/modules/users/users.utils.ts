@@ -9,22 +9,20 @@ export async function generateStudentId(
     { role: 'student' },
     { id: 1, _id: 0 }
   )
-    .sort({ id: -1 })
+    .sort({ createdAt: -1 })
     .lean()
 
   // Determine the current highest user ID
   const highestId = lastStudentId ? parseInt(lastStudentId.id.slice(6)) : 0
 
   // Increment the highest user ID by 1 and format as 5-digit string with leading zeroes and also addint prefix before year as Y and which intake such as summer, auttum, fall as I
-  let nextId = (highestId + 1).toString().padStart(5, '0')
+  const nextId = (highestId + 1).toString().padStart(5, '0')
 
-  nextId = `Y${academicSemester.year.substring(2)}I${
+  const studentIdWithPrefix = `Y${academicSemester.year.substring(2)}I${
     academicSemester.code
   }${nextId}`
 
-  const studentId = nextId
-
-  return studentId
+  return studentIdWithPrefix
 }
 
 export async function generateFacultyId(): Promise<string> {
@@ -46,7 +44,22 @@ export async function generateFacultyId(): Promise<string> {
 
   nextFacultyId = `F${nextFacultyId}`
 
-  const facultyId = nextFacultyId
+  return nextFacultyId
+}
 
-  return facultyId
+export async function generateAdminId(): Promise<string> {
+  // Retrieve the last created user from the database
+  const lastAdminId = await User.findOne({ role: 'admin' }, { id: 1, _id: 0 })
+    .sort({ id: -1 })
+    .lean()
+
+  // Determine the current highest user ID
+  const highestAdminId = lastAdminId ? parseInt(lastAdminId.id.slice(1)) : 0
+
+  // Increment the highest faculty ID by 1 and format as 5-digit string with leading zeroes and also additonal prefix for faculty
+  let nextAdminId = (highestAdminId + 1).toString().padStart(5, '0')
+
+  nextAdminId = `A${nextAdminId}`
+
+  return nextAdminId
 }
