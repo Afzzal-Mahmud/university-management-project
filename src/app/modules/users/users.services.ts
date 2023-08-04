@@ -143,7 +143,7 @@ const createAdmin = async (
 
   try {
     session.startTransaction()
-    /* 1) auto genarated incrimental faculty id */
+    /* 1) auto genarated incrimental admin id */
     const id = await generateAdminId()
     user.id = id
     admin.id = id
@@ -163,9 +163,10 @@ const createAdmin = async (
     await session.commitTransaction()
     await session.endSession()
   } catch (error) {
+    console.log(error)
     await session.abortTransaction()
     await session.endSession()
-    throw new ApiErrors(400, 'Roleback while create user and faculty')
+    throw new ApiErrors(400, 'Roleback while create admin and user')
   }
 
   if (newUserAllData) {
