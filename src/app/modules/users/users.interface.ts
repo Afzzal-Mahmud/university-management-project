@@ -7,7 +7,16 @@ export type IUser = {
   id: string
   role: string
   password: string
+  needsPasswordChange: boolean
   student?: Types.ObjectId | IStudent
   faculty?: Types.ObjectId | IFaculty
   admin?: Types.ObjectId | IAdmin
+}
+
+export type IUserMethod = {
+  isUserExist(id: string): Promise<Partial<IUser> | null>
+  isPasswordMatched(
+    givenPassword: string,
+    savedPassword: string
+  ): Promise<boolean>
 }
