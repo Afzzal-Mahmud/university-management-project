@@ -10,7 +10,15 @@ router.post(
   userControllers.createNewStudent
 )
 
-router.post('/create-faculty', userControllers.createFaculty)
-router.post('/create-admin', userControllers.createAdmin)
+router.post(
+  '/create-faculty',
+  validateZodRequest(userValidation.createFacultyZodSchema),
+  userControllers.createFaculty
+)
+router.post(
+  '/create-admin',
+  validateZodRequest(userValidation.createAdminZodSchema),
+  userControllers.createAdmin
+)
 
 export const userRoutes = { router }

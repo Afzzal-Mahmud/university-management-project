@@ -119,15 +119,12 @@ const createFaculty = async (
   if (newUserAllData) {
     newUserAllData = await User.findOne({ id: newUserAllData.id }).populate({
       path: 'faculty',
-      populate: [
-        { path: 'academicSemester' },
-        { path: 'academicDepartment' },
-        { path: 'academicFaculty' },
-      ],
+      populate: [{ path: 'academicDepartment' }, { path: 'academicFaculty' }],
     })
   }
   return newUserAllData
 }
+
 const createAdmin = async (
   admin: IAdmin,
   user: IUser
@@ -166,18 +163,11 @@ const createAdmin = async (
     console.log(error)
     await session.abortTransaction()
     await session.endSession()
-    throw new ApiErrors(400, 'Roleback while create admin and user')
+    throw new ApiErrors(400, 'Roleback while createing Admin and User')
   }
 
   if (newUserAllData) {
-    newUserAllData = await User.findOne({ id: newUserAllData.id }).populate({
-      path: 'faculty',
-      populate: [
-        { path: 'academicSemester' },
-        { path: 'academicDepartment' },
-        { path: 'academicFaculty' },
-      ],
-    })
+    newUserAllData = await User.findOne({ id: newUserAllData.id })
   }
   return newUserAllData
 }
