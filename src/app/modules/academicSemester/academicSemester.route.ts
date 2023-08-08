@@ -6,7 +6,7 @@ import { academicSemesterControllers } from './academicSemester.controller'
 const router = express.Router()
 
 router.post(
-  '/academic-semester',
+  '/create-semester',
   validateZodRequest(academicSemesterValidation.academicSemesterZodSchema),
   academicSemesterControllers.createSemester
 )

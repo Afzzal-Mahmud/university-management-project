@@ -18,19 +18,19 @@ const moduleRoute = [
     route: userRoutes.router,
   },
   {
-    path: '/create-semesters/',
+    path: '/academic-semesters/',
     route: academicSemesterRoute.router,
   },
   {
-    path: '/academic-faculty/',
+    path: '/academic-facultys/',
     route: academicFacultyRoute.router,
   },
   {
-    path: '/academic-department/',
+    path: '/academic-departments/',
     route: academicDepartmentRoute.router,
   },
   {
-    path: '/student/',
+    path: '/students/',
     route: studentRoutes.router,
   },
   {
@@ -38,7 +38,7 @@ const moduleRoute = [
     route: facultyRoutes.router,
   },
   {
-    path: '/admin/',
+    path: '/admins/',
     route: adminRoute.router,
   },
   {
@@ -46,7 +46,7 @@ const moduleRoute = [
     route: authRoutes.router,
   },
   {
-    path: '/management-department/',
+    path: '/management-departments/',
     route: ManagementDepartmentRoutes.router,
   },
 ]

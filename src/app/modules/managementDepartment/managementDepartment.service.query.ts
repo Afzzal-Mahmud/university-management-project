@@ -11,7 +11,7 @@ import { managementDepartmentSearchableFields } from './managementDepartment.con
 
 const createDepartment = async (
   payload: IManagementDepartment
-): Promise<IManagementDepartment | null> => {
+): Promise<IManagementDepartment> => {
   const result = await ManagementDepartment.create(payload)
   return result
 }
